@@ -47,9 +47,12 @@
 			}
 			return (cache[config.url]= {
 				promise: $http(config).then(function(resp){
-					if(resp.status == 304 || resp.status == 206){
-						// Either not modified or partial content
+					if(resp.status == 206){
 						// Never cache partial content; huge headache
+						return resp;
+					}
+					if(resp.status == 304){
+						// not modified; use cached version
 						return item.resp;
 					}
 					// pragma included for HTTP/1.0
@@ -122,9 +125,12 @@
 			}
 			return (cache[config.url]= {
 				promise: $http(config).then(function(resp){
-					if(resp.status == 304 || resp.status == 206){
-						// Either not modified or partial content
+					if(resp.status == 206){
 						// Never cache partial content; huge headache
+						return resp;
+					}
+					if(resp.status == 304){
+						// not modified; use cached version
 						return item.resp;
 					}
 					// pragma included for HTTP/1.0
